@@ -8,6 +8,7 @@ import (
 	"net/url"
 
 	"github.com/gorilla/mux"
+	"gopkg.in/validator.v2"
 )
 
 type App struct {
@@ -47,11 +48,11 @@ func (a *App) createShortlink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// if err = validator.Validate(req); err != nil {
-	// 	respondWithError(w, StatusError{http.StatusBadRequest,
-	// 		fmt.Errorf("validate parameters failed %v", requrl)})
-	// 	return
-	// }
+	if err = validator.Validate(req); err != nil {
+		respondWithError(w, StatusError{http.StatusBadRequest,
+			fmt.Errorf("validate parameters failed %v", req)})
+		return
+	}
 
 	defer r.Body.Close()
 
